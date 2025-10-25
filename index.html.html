@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BMI 健康測試</title>
+  <style>
+    body {
+      font-family: "Microsoft JhengHei", sans-serif;
+      background: linear-gradient(135deg, #baf7ee, #e0fcf6);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: white;
+      padding: 30px 40px;
+      border-radius: 25px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      max-width: 380px;
+      width: 90%;
+      text-align: center;
+      position: relative;
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    /* 封面圖 */
+    .bmi-image {
+      width: 100%;
+      max-width: 320px;
+      height: auto;
+      display: block;
+      margin: 0 auto 20px auto;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease;
+    }
+
+    .bmi-image:hover {
+      transform: scale(1.03);
+    }
+
+    h1 {
+      color: #3baea0;
+      font-size: 26px;
+      margin-bottom: 15px;
+    }
+
+    /* 標題下方小裝飾線 */
+    .decor-line {
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(to right, #a0e7e5, #3baea0, #a0e7e5);
+      border-radius: 5px;
+      margin: 0 auto 25px auto;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin-bottom: 6px;
+      color: #333;
+      font-size: 15px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 2px solid #a0e7e5;
+      border-radius: 10px;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      border-color: #3baea0;
+    }
+
+    button {
+      background-color: #3baea0;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #2f8f83;
+      transform: translateY(-2px);
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    /* 顏色分類 */
+    .underweight { color: #48c9b0; }
+    .ideal { color: #117a65; }
+    .overweight { color: #f5b7b1; }
+    .moderate { color: #ec7063; }
+    .obese { color: #c0392b; }
+
+    /* 健康建議 */
+    .advice {
+      font-size: 15px;
+      margin-top: 10px;
+      color: #444;
+      background: #f8fffd;
+      border-radius: 10px;
+      padding: 10px;
+      line-height: 1.6;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .footer {
+      margin-top: 20px;
+      font-size: 13px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="download.jpg" alt="BMI 封面圖" class="bmi-image" />
+    <h1>BMI 健康測試</h1>
+    <div class="decor-line"></div>
+
+    <label for="height">身高（公分）</label>
+    <input type="number" id="height" placeholder="請輸入身高（公分）" />
+
+    <label for="weight">體重（公斤）</label>
+    <input type="number" id="weight" placeholder="請輸入體重（公斤）" />
+
+    <button onclick="calculateBMI()">計算 BMI</button>
+
+    <div id="result" class="result"></div>
+    <div id="advice" class="advice"></div>
+    <div class="footer">青綠馬卡龍風 BMI 測試 © 2025</div>
+  </div>
+
+  <script>
+    function calculateBMI() {
+      const height = parseFloat(document.getElementById("height").value);
+      const weight = parseFloat(document.getElementById("weight").value);
+      const resultDiv = document.getElementById("result");
+      const adviceDiv = document.getElementById("advice");
+
+      if (!height || !weight) {
+        resultDiv.innerHTML = "⚠️ 請輸入正確的身高與體重！";
+        resultDiv.className = "result";
+        adviceDiv.innerHTML = "";
+        return;
+      }
+
+      const bmi = (weight / ((height / 100) ** 2)).toFixed(1);
+      let category = "";
+      let colorClass = "";
+      let advice = "";
+
+      if (bmi < 18.5) {
+        category = "體重過輕";
+        colorClass = "underweight";
+        advice = "💧 建議多補充營養，多攝取蛋白質與碳水化合物，維持均衡飲食。";
+      } else if (bmi < 24) {
+        category = "理想體重";
+        colorClass = "ideal";
+        advice = "🌿 體重理想，請繼續保持健康飲食與適度運動！";
+      } else if (bmi < 27) {
+        category = "體重過重";
+        colorClass = "overweight";
+        advice = "🍀 注意飲食控制，可增加運動量以維持體態。";
+      } else if (bmi < 30) {
+        category = "中度肥胖";
+        colorClass = "moderate";
+        advice = "🔥 建議規劃運動與飲食控制，減少高熱量食物攝取。";
+      } else {
+        category = "重度肥胖";
+        colorClass = "obese";
+        advice = "⚠️ 建議諮詢營養師或醫師，建立健康減重計畫。";
+      }
+
+      resultDiv.className = `result ${colorClass}`;
+      resultDiv.innerHTML = `你的 BMI 是：${bmi}<br>${category}`;
+      adviceDiv.innerHTML = advice;
+    }
+  </script>
+</body>
+</html>
